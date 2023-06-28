@@ -9,19 +9,17 @@ module "cipherem" {
     # Required argument 
     # To tell terraform where to download the module's source code when running "terraform init".
     # In this example, the source is terraform's public registry.
-    source                  = "SCB-TechX-Saber-Labs/ecs-private-ethereum-blockchain/aws"
-    
-    # Optional argument
-    # To specify the version of the module, otherwise it uses the latest version.
-    version                 = "0.1.0"
+    source  = "agnxsh/ciphereminfra/aws"
+
+    version = "1.0.1"
   
     # Required argument
     # To distinguish this provisioning from others as this is used to name the created AWS components.
-    network_name            = "devel"
+    network_name            = "cipherem-zkrollup"
 
     # Optional argument
     # How many Ethereum nodes to run in the blockchain network, the default is 2 if not specified.
-    number_of_nodes         = 2
+    number_of_nodes         = 6
     
     # Required argument
     # Specify the AWS region for the provisioned infrastructure.
@@ -49,8 +47,8 @@ module "cipherem" {
     # The addess with public key and private key can be generated from https://iancoleman.io/bip39/
     # Write down the private key as it is required to access the balance in the account.
     initial_eth_allocations = {
-        "0xB5F39800302430c4410ce3F040ac00E1D6cA0CD2": "10",
-        "0x66c0874A273b43aB9967C1474360457e2C910949": "5",
+        "0xb3A2A4E8B6063A91AD0437D27CD2ca7a47ca1502": "10",
+        "0xcB7D815ded702FE3256E9B669745130CdE8f18a9": "5",
     }
     
     # The following are optional arguments for port numbers to exposing services.
@@ -63,7 +61,7 @@ module "cipherem" {
     # The following are optional arguments for the docker images used to run services' container in the module.
     # The default values are the images from docker hub.
     # You might need to modify them to use your own image registry, in case of the docker hub rate limit is reached.
-    go_ethereum_docker_image             = "ethereum/client-go:alltools-v1.10.8"
+    go_ethereum_docker_image             = "agnxsh/cip-zkrollup-image:latest"
     aws_cli_docker_image                 = "amazon/aws-cli"
     # ethstats_docker_image                = "puppeth/ethstats:latest"
     # ethereum_lite_explorer_docker_image  = "alethio/ethereum-lite-explorer:v1.0.0-beta.10"
@@ -79,10 +77,10 @@ output "ecs_cluster_name" {
      value = module.cipherem.ecs_cluster_name
 }
 
-# The DNS of Network Load Balancer for exposing the services.
-output "nlb_dns" {
-     value = module.cipherem.nlb_dns
-}
+# # The DNS of Network Load Balancer for exposing the services.
+# output "nlb_dns" {
+#      value = module.cipherem.nlb_dns
+# }
 
 # # The HTTP endpoint to access the Ethereum block explorer.
 # output "ethereum_explorer_endpoint" {
